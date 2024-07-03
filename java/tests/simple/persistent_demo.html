@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+    <script>
+        function addCallback() {
+            console.log("Adding persistent callback")
+
+            let requets_id = window.cefQuery({
+                request: "persistent",
+                persistent: true,
+                onSuccess: callbackFunction,
+                onFailure: (error_code, error_message) => { console.log("{error_code}, {error_message}") }
+            })
+        }
+
+        function callbackFunction(response) {
+            console.log("Received persistent callback")
+        }
+
+        function removeCallback() {
+            console.log("Remove persistent callback")
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Demo of Persistent Callback</h1>
+    <button onclick="addCallback()">Add Callback</button>
+    <span>After callback is added, periodic missage will appear in console</span>
+
+    <button>Cancel Callback</button>
+    <span>This should stop the callback</span>
+</body>
+
+
+</html>

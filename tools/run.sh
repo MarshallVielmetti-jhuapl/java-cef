@@ -9,7 +9,7 @@ else
   if [ -z "$2" ]; then
     echo "ERROR: Please specify a build type: Debug or Release"
   elif [ -z "$3" ]; then
-    echo "ERROR: Please specify a run type: detailed or simple"
+    echo "ERROR: Please specify a run type: detailed or simple or persistent"
   else
     DIR="$( cd "$( dirname "$0" )" && cd .. && pwd )"
     OUT_PATH="${DIR}/out/$1"
