@@ -32,7 +32,7 @@ bool MessageRouterHandler::OnQuery(
     const CefString& request,
     bool persistent,
     CefRefPtr<CefMessageRouterBrowserSide::Callback> callback) {
-  ScopedJNIEnv env;
+  ScopedJNIEnv env; 
   if (!env)
     return false;
 
@@ -40,7 +40,15 @@ bool MessageRouterHandler::OnQuery(
   ScopedJNIFrame jframe(env, frame);
   jframe.SetTemporary();
   ScopedJNIString jrequest(env, request);
+
+  // CefRefPtr<MessageRouterHandler::JcefCallback> jcb = new CefRefPtr<dd::JcefCallback>(callback);
+  // MessageRouterHandler::JcefCallback jcb = 
   ScopedJNIQueryCallback jcallback(env, callback);
+
+  if (persistent)
+    JNI_CALL_VOID_METHOD(env, jcallback.get(), "makePersistent", "()V");
+    //setPersistent = true
+
 
   jboolean jresult = JNI_FALSE;
 

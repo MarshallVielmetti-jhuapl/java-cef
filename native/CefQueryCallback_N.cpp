@@ -3,6 +3,7 @@
 // can be found in the LICENSE file.
 
 #include "CefQueryCallback_N.h"
+#include <iostream>
 #include "include/wrapper/cef_message_router.h"
 #include "jni_scoped_helpers.h"
 #include "jni_util.h"
@@ -16,6 +17,7 @@ CefRefPtr<CefQueryCallback> GetSelf(jlong self) {
 }
 
 void ClearSelf(JNIEnv* env, jobject obj) {
+  std::cout << "Clearing the query and reference\n";
   // Clear the reference added in ClientHandler::OnQuery.
   SetCefForJNIObject<CefQueryCallback>(env, obj, nullptr, "CefQueryCallback");
 }
@@ -27,11 +29,25 @@ Java_org_cef_callback_CefQueryCallback_1N_N_1Success(JNIEnv* env,
                                                      jobject obj,
                                                      jlong self,
                                                      jstring response) {
+
+  std::cout << "Printing self from CefQueryCallback_N.cpp: " << self << "\n";
+
   CefRefPtr<CefQueryCallback> callback = GetSelf(self);
+
+  // CefMessageRouterBrowserSideImpl::CefQueryCallbackImpl callbackImpl = reinterpret_cast<CefQueryCallbackImpl>(callback.get());
   if (!callback)
     return;
+
   callback->Success(GetJNIString(env, response));
-  ClearSelf(env, obj);
+
+  bool persistent = false;
+  JNI_CALL_BOOLEAN_METHOD(persistent, env, obj, "getIsPersistent", "()Z");
+
+  if (!persistent)
+    ClearSelf(env, obj);
+  else
+    std::cout << "did not clear persistent callback\n";
+  
 }
 
 JNIEXPORT void JNICALL

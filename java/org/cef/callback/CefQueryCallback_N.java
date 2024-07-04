@@ -5,7 +5,14 @@
 package org.cef.callback;
 
 class CefQueryCallback_N extends CefNativeAdapter implements CefQueryCallback {
-    CefQueryCallback_N() {}
+    private boolean persistent_ = false;
+
+    CefQueryCallback_N() {
+    }
+    // CefQueryCallback_N(boolean persistent) {
+    // System.out.println("Setting persistent to be " + persistent);
+    // this.persistent_ = persistent;
+    // }
 
     @Override
     protected void finalize() throws Throwable {
@@ -31,6 +38,16 @@ class CefQueryCallback_N extends CefNativeAdapter implements CefQueryCallback {
         }
     }
 
+    private void makePersistent() {
+        System.out.println("Setting Persistent to True");
+        this.persistent_ = true;
+    }
+
+    private boolean getIsPersistent() {
+        return this.persistent_;
+    }
+
     private final native void N_Success(long self, String response);
+
     private final native void N_Failure(long self, int error_code, String error_message);
 }
